@@ -1,0 +1,75 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Gestions des Bureaux{% endblock %}
+
+
+{% block body %}
+    <style type="text/css">
+        .content{
+            border: 3px solid orange;
+        }
+
+    </style>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card content">
+                    <div class="card-body">
+                    <h1>Gestions des bureaux</h1>
+
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Image</th>
+                                <th>Prix</th>
+                                <th>Surface</th>
+                                <th>Capacite</th>
+                                <th>Date_debut</th>
+                                <th>Date_fin</th>
+                                <th>Ht</th>
+                                <th>Créer</th>
+                                <th>actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for bureaux in bureauxes %}
+                            <tr>
+                                <td>{{ bureaux.nom }}</td>
+                                <td>{{ bureaux.image }}</td>
+                                <td>{{ bureaux.prix }}</td>
+                                <td>{{ bureaux.surface }}</td>
+                                <td>{{ bureaux.capacite }}</td>
+                                <td>{{ bureaux.dateDebut ? bureaux.dateDebut|date('Y-m-d') : '' }}</td>
+                                <td>{{ bureaux.dateFin ? bureaux.dateFin|date('Y-m-d') : '' }}</td>
+                                <td>{{ bureaux.ht }}</td>
+                                <td>{{ bureaux.createdAt ? bureaux.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                <td>
+                                    <a class="btn btn-warning" style="color:white;font-weight:bold" href="{{ path('app_bureaux_show', {'id': bureaux.id}) }}">
+                                        Détails
+                                    </a>
+                                    <a class="btn btn-primary" style="color:white;font-weight:bold" href="{{ path('app_bureaux_edit', {'id': bureaux.id}) }}">
+                                        Editer
+                                    </a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="12">Aucune donnée</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <a class="btn btn-success" style="color:white;font-weight:bold" href="{{ path('app_bureaux_new') }}">
+                        Nouveau bureau
+                    </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block footer %}{% endblock %}

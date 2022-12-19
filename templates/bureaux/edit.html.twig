@@ -1,0 +1,22 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Edition du bureau{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block body %}
+<style type="text/css">
+	.vich-image img{
+		max-width: 300px;
+	}
+</style>
+<div class="container">
+    {{ include('bureaux/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+    <a href="{{ path('app_bureaux_index') }}">back to list</a>
+
+    {{ include('bureaux/_delete_form.html.twig') }}
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

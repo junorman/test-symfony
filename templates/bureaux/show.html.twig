@@ -1,0 +1,89 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Détails{% endblock %}
+
+{% block body %}
+<style type="text/css">
+	.details-styles{
+		color: #000000;
+		font-weight: bold;
+		font-size: 12px;
+	}
+
+    .content{
+		border: 3px solid orange;
+	}
+
+</style>
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card content">
+                    <div class="card-body">
+                        <h1>Détails</h1>
+
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th class="details-styles">Nom</th>
+                                    <td>{{ bureaux.nom }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Image</th>
+                                    <td>{{ bureaux.image }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Prix</th>
+                                    <td>{{ bureaux.prix }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Surface</th>
+                                    <td>{{ bureaux.surface }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Capacite</th>
+                                    <td>{{ bureaux.capacite }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Date_debut</th>
+                                    <td>{{ bureaux.dateDebut ? bureaux.dateDebut|date('Y-m-d') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Date_fin</th>
+                                    <td>{{ bureaux.dateFin ? bureaux.dateFin|date('Y-m-d') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Ht</th>
+                                    <td>{{ bureaux.ht }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Upadted_at</th>
+                                    <td>{{ bureaux.upadtedAt ? bureaux.upadtedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="details-styles">Created_at</th>
+                                    <td>{{ bureaux.createdAt ? bureaux.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <a class="btn btn-warning" style="color:white;font-weight:bold" 
+                            href="{{ path('app_bureaux_index') }}">
+                            Bureaux
+                        </a>
+
+                        <a class="btn btn-success" style="color:white;font-weight:bold" 
+                            href="{{ path('app_bureaux_edit', {'id': bureaux.id}) }}">
+                            Editer
+                        </a>
+                        
+                        {{ include('bureaux/_delete_form.html.twig') }}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

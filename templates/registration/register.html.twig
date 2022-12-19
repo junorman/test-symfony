@@ -1,0 +1,250 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block body %}
+<style type="text/css">
+    .content{
+		border: 3px solid orange;
+	}
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+        var check_pass = "";
+        var get_check_pass = 0;
+        $("#registration_form_plainPassword_first").keyup(function(){
+            checkPasswordStrength();
+            check_pass = checkPasswordStrength();
+            //alert(check_pass);
+        });
+        $('.btn-save').click(function(e) {
+            e.preventDefault();
+
+            var registration_form_email = $('#registration_form_email').val();
+            var registration_form_lastname = $('#registration_form_lastname').val();
+            var registration_form_firstname = $('#registration_form_firstname').val();
+            var registration_form_type_profil = $('#registration_form_type_profil').val();
+            var registration_form_datebirth = $('#registration_form_datebirth').val();
+            var registration_form_tel = $('#registration_form_tel').val();
+            var registration_form_raison_sociale = $('#registration_form_raison_sociale').val();
+            var registration_form_siret = $('#registration_form_siret').val();
+            var registration_form_statut_juridique = $('#registration_form_statut_juridique').val();
+            var registration_form_adresse = $('#registration_form_adresse').val();
+            var registration_form_plainPassword_first = $('#registration_form_plainPassword_first').val();
+            var registration_form_plainPassword_second = $('#registration_form_plainPassword_second').val();
+            
+            var date1 = registration_form_datebirth.split('-')[0];
+            var date2 = new Date().getFullYear();
+            var datebirth = date2 - date1;
+
+            if(registration_form_email.length == ""){
+                    alert("Veuillez saisir l'adresse mail");
+                    return false;
+            }
+            else if(registration_form_lastname.length == ""){
+                alert("Veuillez saisir le nom");
+                return false;
+            }
+            else if(registration_form_firstname.length == ""){
+                alert("Veuillez saisir le prénom");
+                return false;
+            }
+            else if(registration_form_datebirth.length == ""){
+                alert("Veuillez saisir la date de naissance");
+                return false;
+            }
+            else if(registration_form_tel.length == ""){
+                alert("Veuillez saisir le numéro de téléphone");
+                return false;
+            }
+            else if($.isNumeric(registration_form_tel) == false){
+                alert("Veuillez saisir le numéro de téléphone et non des lettres");
+                return false;
+            }
+            else if(registration_form_raison_sociale.length == ""){
+                alert("Veuillez saisir la raison sociale");
+                return false;
+            }
+            else if(registration_form_siret.length == ""){
+                alert("Veuillez saisir le siret");
+                return false;
+            }else if(registration_form_statut_juridique.length == ""){
+                alert("Veuillez saisir le statut juridique");
+                return false;
+            }else if(registration_form_adresse.length == ""){
+                alert("Veuillez saisir l'adresse");
+                return false;
+            }else if(registration_form_plainPassword_first.length == ""){
+                alert("Veuillez saisir le mot de passe");
+                return false;
+            }else if(registration_form_plainPassword_second.length == ""){
+                alert("Veuillez confirmer le mot de passe");
+                return false;
+            }else if(registration_form_plainPassword_second !== registration_form_plainPassword_first){
+                alert("Les mots de passe ne sont pas identique");
+                return false;
+            }else{
+
+                    if(datebirth >= 18){
+                        if(registration_form_type_profil == 1){
+                            if($.isNumeric(registration_form_siret) == false){
+                                alert("Veuillez vous rassurer d'avoir bien saisi le siret avec les 14 chiffres");
+                                return false;
+                            }else{
+                                if(registration_form_siret.length == 14){
+                                    //ok
+                                }else{
+                                    alert("Le siret doit normalement avoir 14 chiffre");
+                                    return false;
+                                }
+                            }
+                            
+                        }
+
+                        if(check_pass == 0){
+                            alert('Veuillez bien saisir votre mot de passe');
+                            return false;
+                        }
+
+                        //INSERTION DANS LA BASE DE DONNEES
+                        $.ajax({  
+                            url:"/test2",  
+                            method:"POST",  
+                            data:{registration_form_email:registration_form_email,
+                            registration_form_lastname:registration_form_lastname,
+                            registration_form_firstname:registration_form_firstname,
+                            registration_form_type_profil:registration_form_type_profil,
+                            registration_form_datebirth:registration_form_datebirth,
+                            registration_form_tel:registration_form_tel,
+                            registration_form_raison_sociale:registration_form_raison_sociale,
+                            registration_form_siret:registration_form_siret,
+                            registration_form_statut_juridique:registration_form_statut_juridique,
+                            registration_form_adresse:registration_form_adresse,
+                            registration_form_plainPassword_first:registration_form_plainPassword_first
+                            },  
+                            success:function(res)  
+                            {     
+                                res.forEach(t => {
+                                    if(t.bureau == 0){
+                                        window.location.href='/connexion';
+                                    }else{
+                                        alert('Cette adresse email exist déjà');
+                                    }
+                                });
+                            },
+                            cache: false  
+                        });
+
+                    }else{
+                        alert('Vous devez avoir plus de 18 ans pour vous inscrive !');
+                    }
+
+            }
+            
+            
+        });
+
+        function checkPasswordStrength() {
+            var number = /([0-9])/;
+            var alphabets = /([a-zA-Z])/;
+            var special_characters = /([~,!,@,#,$,%,^,&,*,-,_,+,=,?,>,<])/;
+            var password = $('#registration_form_plainPassword_first').val().trim();
+            if (password.length < 6) {
+                $('#text_pass').removeClass();
+                $('#text_pass').addClass('weak-password');
+                $('#text_pass').html("Faible (doit contenir au moins 6 caractères.)");
+                get_check_pass = 0;
+            } else {
+                if (password.match(number) && password.match(alphabets) && password.match(special_characters)) {
+                    $('#text_pass').removeClass();
+                    $('#text_pass').addClass('strong-password');
+                    $('#text_pass').html("Fort");
+                    get_check_pass = 1;
+                }
+                else {
+                    $('#text_pass').removeClass();
+                    $('#text_pass').addClass('medium-password');
+                    $('#text_pass').html("Moyen (devrait inclure des alphabets, des chiffres et des caractères spéciaux.)");
+                    get_check_pass = 0;
+                }
+            }
+
+            return get_check_pass;
+        }
+        
+        
+    });
+</script>
+<section class="container my-5">
+    <div class="row">
+        <div class="col-6 mx-auto my-5">
+        <div class="card content">
+                <div class="card-body">
+                    <h1>M'inscrire</h1>
+
+                    {{ form_start(registrationForm, {'attr': {'id': 'form_person_edit', novalidate: 'novalidate'}}) }}
+                        <fieldset>
+                            <legend>Je saisis mes informations</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.firstname) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.lastname) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(registrationForm.datebirth) }}
+                                </div>
+                                <div class="col-md-6">
+                                     {{ form_row(registrationForm.type_profil) }}
+                                </div>
+                                <div class="col-md-12">
+                                     {{ form_row(registrationForm.tel) }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_row(registrationForm.raison_sociale) }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_row(registrationForm.siret) }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_row(registrationForm.statut_juridique) }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_row(registrationForm.adresse) }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_row(registrationForm.email) }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_row(registrationForm.plainPassword, {
+                                        label: 'Password'
+                                    }) }}
+                                    <p id="text_pass">pass</p>
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form_row(registrationForm.RGPDConsent) }}
+                                </div>
+                            </div>
+                            
+
+                        </fieldset>
+                    {{ form_end(registrationForm) }}
+                    
+
+                    <button class="btn btn-lg btn-primary  btn-save">M'inscrire</button>
+                    <a class="btn btn-lg btn-secondary" href="{{ path('app_login') }}">
+                        Me connecter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block footer %}{% endblock %}

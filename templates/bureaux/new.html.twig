@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+
+<title>New Bureaux</title>
+
+{% block body %}
+
+    {{ include('bureaux/_form.html.twig') }}
+
+    <a href="{{ path('app_bureaux_index') }}">back to list</a>
+{% endblock %}

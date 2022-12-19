@@ -1,0 +1,143 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+     <script>
+            $(document).ready(function(){
+                
+                $('.btn-refresh').click(function(){
+                    var capacite = $('#capacite').val('');
+                    var surface = $('#surface').val('');
+                    var prix = $('#prix').val('');
+                    var date_debut = $('#date_debut').val('');
+                    var date_fin = $('#date_fin').val('');
+                });
+
+                $('.btn-search').click(function(){
+                    
+                    var capacite = $('#capacite').val();
+                    var surface = $('#surface').val();
+                    var prix = $('#prix').val();
+                    var date_debut = $('#date_debut').val();
+                    var date_fin = $('#date_fin').val();
+                    var type_bureau = $('#type_bureau').val();
+
+                    if(capacite.length != "" && surface.length !="" && prix.length != ""){
+                        $.ajax({  
+                            url:"/test",  
+                            method:"POST",  
+                            data:{capacite:capacite, surface:surface, prix:prix},  
+                            success:function(res)  
+                            {     
+                                
+                                res.forEach(t => {
+                                    $('.mes_bureaux').html('<div class="col-lg-4 mb-4"><div class="entry2"><a href="single.html"><img src="/images/'+t.image+'" style="width:70%"></a><div class="excerpt"><span class="post-category text-white bg-success mb-3">'+ t.categories.libelle +'</span><h2><a href="single.html">'+ t.nom +'</a></h2><div class="row"><strong style="font-weight:bold;color:#000000">Surface:&nbsp;&nbsp;</strong> <span>'+ t.surface +' m2</span><br></div><div class="row"><strong style="font-weight:bold;color:#000000">Capacité:&nbsp;&nbsp;</strong> <span>'+ t.capacite +' personnes</span><br></div><div class="row"><strong style="font-weight:bold;color:#000000">A partir de&nbsp;</strong> <span>'+ t.prix +'£&nbsp;</span><strong style="font-weight:bold">HT/'+ t.ht +'</strong><br></div><br><p><a href="#" class="btn" style="background-color:orange;color:#ffffff;font-weight:bold;border-radius:10%">Détails</a></p></div></div></div>');
+                                });
+                                
+                            },
+                            cache: false  
+                        });
+                    }
+
+                    if(date_debut.length != "" && date_fin.length !=""){
+                        $.ajax({  
+                            url:"/test3",  
+                            method:"POST",  
+                            data:{date_debut:date_debut, date_fin:date_fin},  
+                            success:function(res)  
+                            {     
+                                
+                            res.forEach(t => {
+                            $('.mes_bureaux').html('<div class="col-lg-4 mb-4"><div class="entry2"><a href="single.html"><img src="/images/'+t.image+'" style="width:70%"></a><div class="excerpt"><span class="post-category text-white bg-success mb-3">'+ t.categories.libelle +'</span><h2><a href="single.html">'+ t.nom +'</a></h2><div class="row"><strong style="font-weight:bold;color:#000000">Surface:&nbsp;&nbsp;</strong> <span>'+ t.surface +' m2</span><br></div><div class="row"><strong style="font-weight:bold;color:#000000">Capacité:&nbsp;&nbsp;</strong> <span>'+ t.capacite +' personnes</span><br></div><div class="row"><strong style="font-weight:bold;color:#000000">A partir de&nbsp;</strong> <span>'+ t.prix +'£&nbsp;</span><strong style="font-weight:bold">HT/'+ t.ht +'</strong><br></div><br><p><a href="#" class="btn" style="background-color:orange;color:#ffffff;font-weight:bold;border-radius:10%">Détails</a></p></div></div></div>');
+                                });
+                                
+                            },
+                            cache: false  
+                        });
+                    }
+
+                });
+            });
+        </script>
+        </br>
+         <div class="container">
+            <div class="row">
+                <div class="col-sm3">
+                    <div class="form-group">
+                        <select class="form-control" id="type_bureau">
+                            <option>Type de bureau</option>
+                            <option value="1">Permanent</option>
+                            <option value="2">Partagé</option>
+                            <option value="3">Temporaire</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm3">
+                    <input type="date" id="date_debut" class="form-control" placeholder="Date de début">
+                </div>
+                <div class="col-sm3">
+                    <input type="date" id="date_fin" class="form-control" placeholder="Date de fin">
+                </div>
+                <div class="col-sm3">
+                    <input type="number" id="prix" class="form-control" placeholder="Budget">
+                </div>
+                <div class="col-sm3">
+                    <input type="text" id="surface" class="form-control" placeholder="Surface">
+                </div>
+                <div class="col-sm3">
+                    <input type="number" id="capacite" class="form-control" placeholder="Personnes">
+                </div>
+                <div class="col-sm3">
+                    <button class="btn btn-primary btn-search" style="background-color: orange;color: #ffffff;font-weight: bold;">
+                        Recherche
+                    </button>
+                    <button class="btn btn-primary btn-refresh" style="color: #ffffff;font-weight: bold;">
+                        Vider le filtre
+                    </button>
+                </div>
+            </div>
+        </div>
+     <div class="site-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-12">
+            <h2>Nos Salles</h2>
+
+          </div>
+        </div>
+        <div class="row mes_bureaux">
+            {% for bureau in bureaux %}
+                <div class="col-lg-4 mb-4">
+                    <div class="entry2">
+                    <a href="single.html">
+                    <img src="{{ vich_uploader_asset(bureau, 'imageFile')}}" alt="Image" class="img-fluid rounded" style="width:70%">
+                    </a>
+                    <div class="excerpt">
+                    <span class="post-category text-white bg-success mb-3">{{ bureau.categories.libelle }}</span>
+
+                    <h2><a href="single.html">{{ bureau.nom }}</a></h2>
+                   
+                        <div class="row">
+                            <strong style="font-weight:bold;color:#000000">Surface:&nbsp;&nbsp;</strong> <span>{{ bureau.surface }} m2</span><br>
+                        </div>
+                        <div class="row">
+                            <strong style="font-weight:bold;color:#000000">Capacité:&nbsp;&nbsp;</strong> <span>{{ bureau.capacite }} personnes</span><br>
+                        </div>
+                        <div class="row">
+                            <strong style="font-weight:bold;color:#000000">A partir de&nbsp;</strong> <span>{{ bureau.prix }}£&nbsp;</span>
+                            <strong style="font-weight:bold">HT/{{ bureau.ht }}</strong><br>
+                        </div>
+                        <br>
+                        <p><a href="#" class="btn" 
+                        style="background-color:orange;color:#ffffff;font-weight:bold;border-radius:10%">Détails</a></p>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+      </div>
+    </div>
+{% endblock %}

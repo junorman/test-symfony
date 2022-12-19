@@ -1,0 +1,51 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Nouveau bureau{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block body %}
+<style type="text/css">
+    .content{
+		border: 3px solid orange;
+	}
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+ <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script>
+  $(function() {
+    $( "#bureaux_debut" ).datepicker();
+    $( "#bureaux_fin" ).datepicker();
+  });
+  </script>
+<div class="my-5">
+  <div class="row">
+  <div class="col-md-4"></div>
+	<div class="col-md-4">
+		<a href="{{ path('app_bureaux_index') }}" class="btn" style="background-color: orange;color: #ffffff;font-weight: bold;border-radius:2%;border:1px solid orange;">
+			Consulter les bureaux
+		</a>
+	</div>
+    <div class="col-md-4"></div>
+  </div>
+<br>
+</div>
+    <div class="row">
+        <div class="col-6 mx-auto my-5">
+            <div class="card content jumbotron">
+                <div class="card-body">
+                    <h3>Créer un nouveau bureau</h3>
+                    {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        <button class="btn btn-primary" style="background-color: orange;color: #ffffff;font-weight: bold;border-radius:10%;border:1px solid orange;">{{ button_label|default('Enregistrer') }}</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -1,0 +1,53 @@
+<script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+<script>
+            $(document).ready(function(){
+                $('.btn-s').click(function(e){
+                    e.preventDefault();
+                    var form = document.getElementById("myform");
+                    $.ajax({
+                    url:"/test2",
+                    data: new FormData(form),// the formData function is available in almost all new browsers.
+                    type:"post",
+                    contentType:false,
+                    processData:false,
+                    cache:false,
+                    dataType:"json", // Change this according to your response from the server.
+                    error:function(err){
+                            console.error(err);
+                    },
+                    success:function(data){
+                        data.forEach(t => {
+                                alert(t.bureau);
+                            });      
+                    },
+                    complete:function(){
+                    console.log("Request finished.");
+
+                    }
+                    });
+                });
+            });
+</script>
+
+ <form id="myform" method="post">
+  <input type="text" name="username" />
+  <input type="file" name="upload" />
+  <button class="btn btn-lg btn-primary  btn-s">ok</button>
+</form>
+
+#[Route('/test2', name: 'app_test2')]
+    public function test(Request $request){
+        $file = $request->files->get('upload');
+        $filename = uniqid().".".$file->getClientOriginalExtension();
+        //$path = "/path/where/we/want-to-save-the-file";
+        //$file->move($path,$filename); // move the file to a path
+
+        $jsonData = array();
+        $temp = array(
+            'bureau' => $filename
+        );
+        $jsonData[0] = $temp;
+        return new JsonResponse($jsonData);
+        //$request->files->get('doc')->getClientOriginalName;
+        //$request->request->get('registration_form_email')
+    }
